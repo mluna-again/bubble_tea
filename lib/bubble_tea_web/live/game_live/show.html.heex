@@ -1,1 +1,19 @@
 <h1><%= @game.name %></h1>
+
+<%= if @changeset do %>
+  <.modal
+    can_close?={false}
+  >
+    <.form
+      let={f}
+      for={@changeset}
+      phx-change="validate"
+      phx-submit="save"
+    >
+      <div>
+        <label for="username">Your name</label>
+        <%= text_input f, :username %>
+      </div>
+    </.form>
+  </.modal>
+<% end %>

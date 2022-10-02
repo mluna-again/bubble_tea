@@ -24,7 +24,10 @@ defmodule BubbleTeaWeb.LiveHelpers do
       </.modal>
   """
   def modal(assigns) do
-    assigns = assign_new(assigns, :return_to, fn -> nil end)
+    assigns =
+      assigns
+      |> assign_new(:return_to, fn -> nil end)
+      |> assign_new(:can_close?, fn -> true end)
 
     ~H"""
     <div id="modal" class="phx-modal fade-in" phx-remove={hide_modal()}>
@@ -35,15 +38,17 @@ defmodule BubbleTeaWeb.LiveHelpers do
         phx-window-keydown={JS.dispatch("click", to: "#close")}
         phx-key="escape"
       >
-        <%= if @return_to do %>
-          <%= live_patch "✖",
-            to: @return_to,
-            id: "close",
-            class: "phx-modal-close",
-            phx_click: hide_modal()
-          %>
-        <% else %>
-          <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal()}>✖</a>
+        <%= if @can_close? do %>
+          <%= if @return_to do %>
+            <%= live_patch "✖",
+              to: @return_to,
+              id: "close",
+              class: "phx-modal-close",
+              phx_click: hide_modal()
+            %>
+          <% else %>
+            <a id="close" href="#" class="phx-modal-close" phx-click={hide_modal()}>✖</a>
+          <% end %>
         <% end %>
 
         <%= render_slot(@inner_block) %>

@@ -15,16 +15,6 @@ defmodule BubbleTeaWeb.GameLive.Index do
   end
 
   @impl true
-  def update(%{game: game} = assigns, socket) do
-    changeset = Games.change_game(game)
-
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(:changeset, changeset)}
-  end
-
-  @impl true
   def handle_event("validate", %{"game" => game_params}, socket) do
     changeset =
       socket.assigns.game

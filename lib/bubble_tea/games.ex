@@ -6,7 +6,7 @@ defmodule BubbleTea.Games do
   import Ecto.Query, warn: false
   alias BubbleTea.Repo
 
-  alias BubbleTea.Games.Game
+  alias BubbleTea.Games.{Game, Player}
 
   @doc """
   Returns the list of games.
@@ -100,5 +100,15 @@ defmodule BubbleTea.Games do
   """
   def change_game(%Game{} = game, attrs \\ %{}) do
     Game.changeset(game, attrs)
+  end
+
+  def change_player(%Player{} = player, attrs \\ %{}) do
+    Player.update_changeset(player, attrs)
+  end
+
+  def attach_player(%Game{} = game, attrs \\ %{}) do
+    %Player{}
+    |> Player.create_changeset(Map.put(attrs, "game_id", game.id))
+    |> Repo.insert()
   end
 end
