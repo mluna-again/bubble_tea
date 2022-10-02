@@ -2,7 +2,7 @@ defmodule BubbleTeaWeb.GameLive.Show do
   use BubbleTeaWeb, :live_view
 
   alias BubbleTea.Games
-  alias BubbleTea.Games.{Game, Player}
+  alias BubbleTea.Games.Player
   alias Phoenix.PubSub
 
   @impl true
@@ -31,6 +31,7 @@ defmodule BubbleTeaWeb.GameLive.Show do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
+  @impl true
   def handle_event("save", %{"player" => player}, socket) do
     case Games.attach_player(socket.assigns.game, player) do
       {:ok, player} ->
@@ -51,6 +52,7 @@ defmodule BubbleTeaWeb.GameLive.Show do
     end
   end
 
+  @impl true
   def handle_info(%{player: player, action: "new_player"}, socket) do
     game = socket.assigns.game
     player = Games.get_player!(player.id)
@@ -60,5 +62,25 @@ defmodule BubbleTeaWeb.GameLive.Show do
       |> assign(:game, Map.put(game, :players, [player | game.players]))
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{player: player, action: "player_leave"}, socket) do
+    game = socket.assigns.game
+    players = Enum.filter(game.players, fn %{id: player_id} -> player_id != player.id end)
+
+    socket =
+      socket
+      |> assign(:game, Map.put(game, :players, players))
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def terminate(_reason, socket) do
+    PubSub.broadcast!(BubbleTea.PubSub, socket.assigns.topic, %{
+      action: "player_leave",
+      player: socket.assigns.player
+    })
   end
 end
