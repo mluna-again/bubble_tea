@@ -1,0 +1,50 @@
+<nav class="bg-white dark:bg-gray-700 transition-all p-4">
+  <ul class="flex justify-between">
+    <li class="text-xl dark:text-white">Bubble Tea 🧋</li>
+    <li
+      class="bg-gray-400 dark:bg-white w-14 h-7 rounded-full relative"
+      id="dark-mode-btn"
+    >
+      <span
+        class="dark:bg-gray-400 bg-white rounded-full transition absolute h-7 w-7 translate-0 dark:translate-x-full shadow-xl"
+      >
+        🌞
+      </span>
+    </li>
+  </ul>
+</nav>
+<script>
+  const sun = "🌞";
+  const moon = "🌜";
+  const darkModeBtnSelector = "#dark-mode-btn";
+  const emojiElementSelector = "#dark-mode-btn span";
+  const darkModeBtn = document.querySelector(darkModeBtnSelector);
+
+  darkModeBtn.addEventListener("click", () => {
+    const emojiElement = document.querySelector(emojiElementSelector);
+    const currentEmoji = emojiElement.textContent.trim();
+    const newEmoji = currentEmoji === sun ? moon : sun;
+    emojiElement.textContent = newEmoji;
+
+    window.localStorage.setItem("dark-mode", newEmoji === moon);
+
+    if (newEmoji === sun) {
+      document.body.classList.remove("dark");
+      return;
+    }
+
+    document.body.classList.add("dark");
+  });
+
+  const defaultTheme = () => {
+    const darkMode = window.localStorage.getItem("dark-mode") === "true";
+
+    if (darkMode) {
+      document.body.classList.add("dark");
+      document.querySelector(emojiElementSelector).textContent = moon;
+      return;
+    }
+  };
+
+  defaultTheme();
+</script>
