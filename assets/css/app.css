@@ -33,9 +33,8 @@
   display: none;
 }
 .invalid-feedback {
-  color: #a94442;
+  color: #d41c4d;
   display: block;
-  margin: -1rem 0 2rem;
 }
 
 /* LiveView specific classes for your customization */

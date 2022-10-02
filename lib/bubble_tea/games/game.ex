@@ -13,6 +13,7 @@ defmodule BubbleTea.Games.Game do
   def changeset(game, attrs) do
     game
     |> cast(attrs, [:name, :over])
-    |> validate_required([:name, :over])
+    |> validate_required([:name])
+    |> validate_length(:name, min: 4)
   end
 end
