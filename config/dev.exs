@@ -26,7 +26,8 @@ config :bubble_tea, BubbleTeaWeb.Endpoint,
   secret_key_base: "YerN7V2lmp0ycm7NCA1YPK7Wc1zYapFyP/NJ0IWbKMqmiqVxBsiyfF2WGgdfll4x",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 # ## SSL Support
