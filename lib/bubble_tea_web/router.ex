@@ -17,12 +17,8 @@ defmodule BubbleTeaWeb.Router do
   scope "/", BubbleTeaWeb do
     pipe_through :browser
 
-    live "/games", GameLive.Index, :index
-    live "/games/new", GameLive.Index, :new
-    live "/games/:id/edit", GameLive.Index, :edit
-
-    live "/games/:id", GameLive.Show, :show
-    live "/games/:id/show/edit", GameLive.Show, :edit
+    live "/games", GameLive.Index
+    live "/games/:id", GameLive.Show
 
     get "/", Redirect, to: "/games"
   end
