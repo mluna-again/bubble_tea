@@ -35,7 +35,7 @@ defmodule BubbleTea.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_game!(id), do: Repo.get!(Game, id)
+  def get_game!(id), do: Repo.get!(Game, id) |> Repo.preload([:players])
 
   @doc """
   Creates a game.

@@ -17,3 +17,7 @@
     </.form>
   </.modal>
 <% end %>
+
+<%= for player <- @game.players do %>
+    <h1><%= player.username %></h1>
+<% end %>

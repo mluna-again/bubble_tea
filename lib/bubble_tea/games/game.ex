@@ -5,6 +5,7 @@ defmodule BubbleTea.Games.Game do
   schema "games" do
     field :name, :string
     field :over, :boolean, default: false
+    has_many :players, BubbleTea.Games.Player
 
     timestamps()
   end
