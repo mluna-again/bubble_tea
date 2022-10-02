@@ -10,10 +10,13 @@
       phx-change="validate"
       phx-submit="save"
     >
-      <div>
-        <label for="username">Your name</label>
-        <%= text_input f, :username %>
+      <div class="flex flex-col text-center">
+        <label for="username" class="text-xl mb-4">Your name</label>
+        <%= text_input f, :username, class: "rounded" %>
+        <%= error_tag f, :username %>
       </div>
+
+      <button class="text-white w-full bg-blue-400 mt-4 rounded py-3">Enter game</button>
     </.form>
   </.modal>
 <% end %>
