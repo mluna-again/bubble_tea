@@ -111,4 +111,6 @@ defmodule BubbleTea.Games do
     |> Player.create_changeset(Map.put(attrs, "game_id", game.id))
     |> Repo.insert()
   end
+
+  def get_player!(id), do: Repo.get!(Player, id)
 end
