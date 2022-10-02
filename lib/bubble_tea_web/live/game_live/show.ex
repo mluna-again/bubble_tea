@@ -31,6 +31,26 @@ defmodule BubbleTeaWeb.GameLive.Show do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
+  def handle_event("save", %{"player" => player}, socket) do
+    case Games.attach_player(socket.assigns.game, player) do
+      {:ok, player} ->
+        socket =
+          socket
+          |> assign(:changeset, nil)
+          |> assign(:player, player)
+
+        PubSub.broadcast!(BubbleTea.PubSub, socket.assigns.topic, %{
+          player: player,
+          action: "new_player"
+        })
+
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
   def handle_info(%{player: player, action: "new_player"}, socket) do
     game = socket.assigns.game
     player = Games.get_player!(player.id)
@@ -40,21 +60,5 @@ defmodule BubbleTeaWeb.GameLive.Show do
       |> assign(:game, Map.put(game, :players, [player | game.players]))
 
     {:noreply, socket}
-  end
-
-  def handle_event("save", %{"player" => player}, socket) do
-    case Games.attach_player(socket.assigns.game, player) do
-      {:ok, player} ->
-        socket =
-          socket
-          |> assign(:changeset, nil)
-          |> assign(:player, player)
-
-        PubSub.broadcast!(BubbleTea.PubSub, socket.assigns.topic, %{player: player, action: "new_player"})
-        {:noreply, socket}
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
   end
 end
