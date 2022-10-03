@@ -5,6 +5,7 @@ defmodule BubbleTea.Games.Player do
   schema "players" do
     field :selection, :integer
     field :username, :string
+    field :active, :boolean, default: true
     field :game_id, :id
 
     timestamps()
@@ -20,6 +21,6 @@ defmodule BubbleTea.Games.Player do
   @doc false
   def update_changeset(player, attrs) do
     player
-    |> cast(attrs, [:username, :selection])
+    |> cast(attrs, [:username, :selection, :active])
   end
 end
