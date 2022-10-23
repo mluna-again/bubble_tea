@@ -38,17 +38,10 @@ defmodule BubbleTea.Games do
   def get_game!(id), do: Repo.get!(Game, id) |> Repo.preload([:players])
 
   def get_game_with_active_users!(id) do
-    from(game in Game, as: :game,
-      where: game.id == ^id,
-      join: player in subquery(
-        from Player,
-        where: [game_id: parent_as(:game).id, active: true]
-      ),
-      on: player.game_id == game.id,
-      limit: 1,
-      preload: [:players]
-    )
-    |> Repo.one!()
+    game = get_game!(id)
+    active_players = Enum.filter(game.players, fn player -> player.active end)
+
+    Map.put(game, :players, active_players)
   end
 
   @doc """
@@ -121,14 +114,16 @@ defmodule BubbleTea.Games do
   end
 
   def attach_player(%Game{} = game, attrs \\ %{}) do
-    %Player{}
+    player = Repo.get_by(Player, username: attrs["username"]) || %Player{}
+
+    player
     |> Player.create_changeset(Map.put(attrs, "game_id", game.id))
-    |> Repo.insert()
+    |> Repo.insert_or_update()
   end
 
   def get_player!(id), do: Repo.get!(Player, id)
 
-  def detach_player!(%Game{} = game, %Player{} = player) do
+  def detach_player!(%Player{} = player) do
     player
     |> Player.update_changeset(%{active: false})
     |> Repo.update!()

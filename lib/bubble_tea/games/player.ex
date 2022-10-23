@@ -16,6 +16,7 @@ defmodule BubbleTea.Games.Player do
     player
     |> cast(attrs, [:username, :game_id])
     |> validate_required([:username])
+    |> put_change(:active, true)
   end
 
   @doc false

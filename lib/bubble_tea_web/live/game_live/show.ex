@@ -78,7 +78,8 @@ defmodule BubbleTeaWeb.GameLive.Show do
 
   @impl true
   def terminate(_reason, socket) do
-    Games.detach_player!(socket.assigns.game, socket.assigns.player)
+    Games.detach_player!(socket.assigns.player)
+
     PubSub.broadcast!(BubbleTea.PubSub, socket.assigns.topic, %{
       action: "player_leave",
       player: socket.assigns.player

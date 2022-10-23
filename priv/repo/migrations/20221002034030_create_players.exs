@@ -3,13 +3,14 @@ defmodule BubbleTea.Repo.Migrations.CreatePlayers do
 
   def change do
     create table(:players) do
-      add :username, :string
-      add :selection, :integer
-      add :game_id, references(:games, on_delete: :delete_all)
+      add(:username, :string)
+      add(:selection, :integer)
+      add(:game_id, references(:games, on_delete: :delete_all))
 
       timestamps()
     end
 
-    create index(:players, [:game_id])
+    create(index(:players, [:game_id]))
+    create(index(:players, [:username]))
   end
 end
